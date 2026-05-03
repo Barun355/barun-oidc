@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import ApiError from "../utils/api-error.ts"
+import ApiError from "../utils/api-error"
 
 function globalErrorHandler(
   err: unknown,

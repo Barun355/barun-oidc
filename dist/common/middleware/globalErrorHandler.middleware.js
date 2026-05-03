@@ -1,0 +1,28 @@
+import ApiError from "../utils/api-error";
+function globalErrorHandler(err, req, res, next) {
+    // If it's custom error
+    if (err instanceof ApiError) {
+        return res.status(err.statusCode).json({
+            success: false,
+            error: {
+                code: err.code,
+                message: err.message,
+                status: err.statusCode,
+                details: err.details ?? [],
+            },
+        });
+    }
+    // Unknown or unexpected error
+    console.error(err);
+    return res.status(500).json({
+        success: false,
+        error: {
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong",
+            status: 500,
+            details: [],
+        },
+    });
+}
+export default globalErrorHandler;
+//# sourceMappingURL=globalErrorHandler.middleware.js.map

@@ -1,5 +1,5 @@
 import z from "zod";
-import BaseDto from "../../../common/dto/base.dto.ts";
+import BaseDto from "../../../common/dto/base.dto";
 
 class loginDto extends BaseDto {
   static override schema = z.object({
