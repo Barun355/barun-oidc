@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .auth-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--spacing-8) var(--spacing-4);
+    }
+
+    .auth-shell {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .auth-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .auth-eyebrow .app-name-badge {
+      color: var(--spectral-white);
+    }
+
+    .auth-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+      color: var(--spectral-white);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .auth-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+      color: var(--spectral-white);
+      opacity: 0.7;
+      margin-bottom: var(--spacing-10);
+      letter-spacing: var(--track-tight);
+    }
+
+    .auth-subtitle b {
+      color: var(--spectral-white);
+      opacity: 1;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-3);
+    }
+
+    .form-group + .form-group {
+      margin-top: var(--spacing-6);
+    }
+
+    .auth-shell .btn-primary {
+      width: 100%;
+      margin-top: var(--spacing-8);
+    }
+
+    .auth-footer {
+      margin-top: var(--spacing-8);
+      padding-top: var(--spacing-6);
+      border-top: 1px solid var(--hairline);
+      text-align: center;
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+    }
+
+    .auth-footer a {
+      color: var(--spectral-white);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .auth-footer a:hover {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <main class="auth-page">
+    <div class="auth-shell">
+      <div class="auth-eyebrow">— <span class="app-name-badge">{application_name}</span></div>
+      <h1 class="auth-title">Sign in to<br />your account</h1>
+      <p class="auth-subtitle">Enter your credentials to continue to <b>{application_name}</b></p>
+
+      <form method="post" id="signin-form">
+        <div class="form-group">
+          <label class="label" for="email">Email</label>
+          <input
+            class="input"
+            id="email"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="password">Password</label>
+          <input
+            class="input"
+            id="password"
+            name="password"
+            type="password"
+            placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+
+        <button class="btn btn-primary" type="submit" id="signin-btn">Sign in</button>
+      </form>
+
+      <div id="error-message" class="error-banner" style="display: none;"></div>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="/o/auth2/v2/auth/sign-up">Sign up</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var signinForm = document.getElementById("signin-form");
+    var clientId = new URLSearchParams(window.location.search).get("clientId");
+    if (clientId) {
+      signinForm.setAttribute("action", "/o/auth2/v2/auth/sign-in?clientId=" + encodeURIComponent(clientId));
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register Your Application</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .register-page {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--spacing-10) var(--spacing-4);
+    }
+
+    .register-shell {
+      width: 100%;
+      max-width: 640px;
+    }
+
+    .register-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .register-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+      color: var(--spectral-white);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .register-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+      color: var(--spectral-white);
+      opacity: 0.7;
+      margin-bottom: var(--spacing-10);
+      letter-spacing: var(--track-tight);
+    }
+
+    /* ---- Step indicator ---- */
+    .step-indicator {
+      display: flex;
+      gap: var(--spacing-3);
+      margin-bottom: var(--spacing-10);
+      padding: var(--spacing-4) 0;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-1);
+      flex: 1;
+      position: relative;
+      padding: 0 var(--spacing-2);
+      opacity: 0.4;
+      transition: opacity 0.2s ease;
+    }
+
+    .step.active,
+    .step.completed { opacity: 1; }
+
+    .step-number {
+      font-family: var(--font-display);
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      color: var(--spectral-white);
+      letter-spacing: var(--track-nav);
+    }
+
+    .step.active .step-number {
+      color: var(--spectral-white);
+    }
+
+    .step-label {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--spectral-white);
+    }
+
+    @media (max-width: 600px) {
+      .step-label { display: none; }
+    }
+
+    /* ---- Form sections ---- */
+    .form-section {
+      display: none;
+      width: 100%;
+    }
+
+    .form-section.active {
+      display: block;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-3);
+      margin-bottom: 0;
+    }
+
+    .form-group + .form-group {
+      margin-top: var(--spacing-6);
+    }
+
+    .label-hint {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--track-tight);
+      color: var(--muted-text);
+      margin-top: var(--spacing-1);
+    }
+
+    /* ---- Redirect URI list ---- */
+    .redirect-uris {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-4);
+      margin-top: var(--spacing-4);
+      margin-bottom: var(--spacing-6);
+    }
+
+    .redirect-uri-item {
+      display: flex;
+      gap: var(--spacing-3);
+      align-items: center;
+    }
+
+    .redirect-uri-item input {
+      flex: 1;
+    }
+
+    .remove-uri-btn {
+      padding: 0.5rem 0.85rem;
+      background-color: transparent;
+      color: var(--spectral-white);
+      border: 1px solid var(--ghost-border);
+      border-radius: var(--radius-button);
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .remove-uri-btn:hover {
+      background-color: var(--ghost-surface-hover);
+      border-color: var(--ghost-border-hover);
+    }
+
+    .add-uri-btn {
+      padding: 0.75rem 1rem;
+      background-color: transparent;
+      color: var(--spectral-white);
+      border: 1px dashed var(--ghost-border);
+      border-radius: var(--radius-button);
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .add-uri-btn:hover {
+      background-color: var(--ghost-surface);
+      border-color: var(--spectral-white);
+    }
+
+    /* ---- Review section ---- */
+    .review-item {
+      padding: var(--spacing-4) 0;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .review-item:first-of-type {
+      border-top: 1px solid var(--hairline);
+    }
+
+    .review-item-label {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-2);
+    }
+
+    .review-item-value {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      color: var(--spectral-white);
+      letter-spacing: var(--track-tight);
+      word-break: break-all;
+      line-height: 1.5;
+    }
+
+    /* ---- Success section ---- */
+    .success-section {
+      display: none;
+    }
+
+    .success-section.active {
+      display: block;
+    }
+
+    .success-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .success-icon {
+      font-family: var(--font-display);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--spectral-white);
+      padding: var(--spacing-2) var(--spacing-3);
+      border: 1px solid var(--ghost-border);
+      display: inline-block;
+      margin-bottom: var(--spacing-4);
+    }
+
+    .success-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-xl);
+      font-weight: 900;
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+      color: var(--spectral-white);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .success-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+      color: var(--spectral-white);
+      opacity: 0.78;
+      margin-bottom: var(--spacing-8);
+      letter-spacing: var(--track-tight);
+    }
+
+    .credentials-box {
+      padding: var(--spacing-6) var(--spacing-6);
+      border: 1px solid var(--ghost-border);
+      background-color: var(--ghost-surface);
+      margin-bottom: var(--spacing-6);
+    }
+
+    .credential-item {
+      margin-bottom: var(--spacing-5);
+    }
+
+    .credential-item:last-child { margin-bottom: 0; }
+
+    .credential-label {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-2);
+    }
+
+    .credential-value-container {
+      display: flex;
+      gap: var(--spacing-2);
+      align-items: stretch;
+    }
+
+    .credential-value {
+      flex: 1;
+      padding: var(--spacing-3) var(--spacing-3);
+      background-color: var(--space-black);
+      border: 1px solid var(--ghost-border);
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      color: var(--spectral-white);
+      letter-spacing: 0.5px;
+      word-break: break-all;
+      line-height: 1.5;
+    }
+
+    .copy-btn {
+      padding: 0 var(--spacing-4);
+      background-color: var(--ghost-surface);
+      color: var(--spectral-white);
+      border: 1px solid var(--ghost-border);
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      background-color: var(--ghost-surface-hover);
+      border-color: var(--ghost-border-hover);
+    }
+
+    .copy-btn.copied {
+      background-color: var(--spectral-white);
+      color: var(--space-black);
+      border-color: var(--spectral-white);
+    }
+
+    /* ---- Form navigation ---- */
+    .form-actions {
+      display: flex;
+      gap: var(--spacing-3);
+      justify-content: space-between;
+      margin-top: var(--spacing-10);
+    }
+
+    .form-actions .btn-secondary {
+      /* uses global ghost button style */
+    }
+
+    .form-actions .btn,
+    .form-actions .btn-primary {
+      margin-left: auto;
+    }
+
+    /* ---- Error message (in-wizard, uses .show toggle) ---- */
+    .error-message {
+      display: none;
+      padding: var(--spacing-3) var(--spacing-4);
+      background-color: var(--ghost-surface);
+      border: 1px solid var(--ghost-border);
+      border-left: 3px solid var(--spectral-white);
+      color: var(--spectral-white);
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      letter-spacing: var(--track-tight);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-6);
+    }
+
+    .error-message.show { display: block; }
+
+    .error-message::before {
+      content: "// ERROR — ";
+      font-weight: 700;
+      letter-spacing: var(--track-nav);
+    }
+  </style>
+</head>
+<body>
+  <main class="register-page">
+    <div class="register-shell">
+      <div class="register-eyebrow">— Application Registration</div>
+      <h1 class="register-title">Register your<br />application</h1>
+      <p class="register-subtitle">Get OAuth credentials for your app.</p>
+
+      <!-- Step Indicator -->
+      <div class="step-indicator">
+        <div class="step active completed" data-step="1">
+          <span class="step-number">01 / 03</span>
+          <span class="step-label">Basic Info</span>
+        </div>
+        <div class="step" data-step="2">
+          <span class="step-number">02 / 03</span>
+          <span class="step-label">Redirect URIs</span>
+        </div>
+        <div class="step" data-step="3">
+          <span class="step-number">03 / 03</span>
+          <span class="step-label">Review</span>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div id="error-message" class="error-message"></div>
+
+      <!-- Form -->
+      <form id="register-form">
+        <!-- Step 1: Basic Info -->
+        <div class="form-section active" data-step="1">
+          <div class="form-group">
+            <label class="label" for="app-name">Application Name *</label>
+            <input
+              class="input"
+              id="app-name"
+              name="applicationName"
+              type="text"
+              placeholder="My Awesome App"
+              maxlength="50"
+              value="Barun Tiwary"
+              required
+            />
+            <p class="label-hint">Max 50 characters. This is the name users will see.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="app-url">Application URL *</label>
+            <input
+              class="input"
+              id="app-url"
+              name="applicationUrl"
+              type="url"
+              placeholder="https://myapp.com"
+              value="https://new.baruntiwary.dev"
+              required
+            />
+            <p class="label-hint">The main URL of your application.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="app-description">Description *</label>
+            <textarea
+              class="input"
+              id="app-description"
+              name="applicationDescription"
+              placeholder="Describe your application and what it does..."
+              minlength="10"
+              maxlength="200"
+              required
+            >Barun's personal website and blog about web development, programming, and technology.</textarea>
+            <p class="label-hint">10-200 characters. Help users understand your app.</p>
+          </div>
+        </div>
+
+        <!-- Step 2: Redirect URIs -->
+        <div class="form-section" data-step="2">
+          <div class="form-group">
+            <label class="label">Redirect URIs *</label>
+            <p class="label-hint">Users will be redirected to these URIs after authentication. Add at least one.</p>
+          </div>
+
+          <div class="redirect-uris" id="redirect-uris-container">
+            <div class="redirect-uri-item">
+              <input
+                class="input redirect-uri-input"
+                type="url"
+                placeholder="https://myapp.com/callback"
+                value="https://new.baruntiwary.dev/oauth"
+                required
+              />
+              <button type="button" class="remove-uri-btn" style="display: none;">Remove</button>
+            </div>
+          </div>
+
+          <button type="button" id="add-uri-btn" class="add-uri-btn">+ Add Redirect URI</button>
+        </div>
+
+        <!-- Step 3: Review -->
+        <div class="form-section" data-step="3">
+          <div class="form-group">
+            <label class="label">Review Your Application Details</label>
+          </div>
+
+          <div class="review-item">
+            <div class="review-item-label">Application Name</div>
+            <div class="review-item-value" id="review-app-name"></div>
+          </div>
+
+          <div class="review-item">
+            <div class="review-item-label">Application URL</div>
+            <div class="review-item-value" id="review-app-url"></div>
+          </div>
+
+          <div class="review-item">
+            <div class="review-item-label">Description</div>
+            <div class="review-item-value" id="review-app-description"></div>
+          </div>
+
+          <div class="review-item">
+            <div class="review-item-label">Redirect URIs</div>
+            <div class="review-item-value" id="review-redirect-uris"></div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Success Section -->
+      <div id="success-section" class="success-section">
+        <div class="success-eyebrow">— Mission Status</div>
+        <div class="success-icon">[ Registered ]</div>
+        <h2 class="success-title">Application registered</h2>
+        <p class="success-subtitle">Save your credentials securely. You won't see them again.</p>
+
+        <div class="credentials-box">
+          <div class="credential-item">
+            <div class="credential-label">Client ID</div>
+            <div class="credential-value-container">
+              <div class="credential-value" id="client-id"></div>
+              <button type="button" class="copy-btn" data-copy="client-id">Copy</button>
+            </div>
+          </div>
+
+          <div class="credential-item">
+            <div class="credential-label">Client Secret</div>
+            <div class="credential-value-container">
+              <div class="credential-value" id="client-secret"></div>
+              <button type="button" class="copy-btn" data-copy="client-secret">Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions" id="form-actions">
+        <button type="button" id="prev-btn" class="btn btn-secondary" style="display: none;">Back</button>
+        <button type="button" id="next-btn" class="btn btn-primary">Next</button>
+      </div>
+
+      <div id="success-actions" class="form-actions" style="display: none;">
+        <button type="button" id="register-another-btn" class="btn btn-outline">Register Another App</button>
+        <a href="/" class="btn btn-primary">Back Home</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Form logic
+    var currentStep = 1;
+    var form = document.getElementById("register-form");
+    var formData = {};
+
+    var nextBtn = document.getElementById("next-btn");
+    var prevBtn = document.getElementById("prev-btn");
+    var addUriBtn = document.getElementById("add-uri-btn");
+    var successSection = document.getElementById("success-section");
+    var formActions = document.getElementById("form-actions");
+    var successActions = document.getElementById("success-actions");
+    var errorMessage = document.getElementById("error-message");
+
+    function showStep(step) {
+      var sections = document.querySelectorAll(".form-section");
+      sections.forEach(function (el) {
+        el.classList.remove("active");
+      });
+
+      var targetSection = document.querySelector('.form-section[data-step="' + step + '"]');
+      if (targetSection) {
+        targetSection.classList.add("active");
+      }
+
+      document.querySelectorAll(".step").forEach(function (el) {
+        el.classList.remove("active");
+      });
+      document.querySelector('.step[data-step="' + step + '"]').classList.add("active");
+
+      prevBtn.style.display = step > 1 ? "inline-flex" : "none";
+      nextBtn.style.display = "inline-flex";
+
+      if (step === 3) {
+        nextBtn.textContent = "Register App";
+      } else {
+        nextBtn.textContent = "Next";
+      }
+    }
+
+    function collectFormData() {
+      formData = {
+        applicationName: document.getElementById("app-name").value,
+        applicationUrl: document.getElementById("app-url").value,
+        applicationDescription: document.getElementById("app-description").value,
+        redirectUrl: Array.from(document.querySelectorAll(".redirect-uri-input"))
+          .map(function (el) {
+            return el.value;
+          })
+          .filter(Boolean)[0] || ""
+      };
+    }
+
+    function validateStep(step) {
+      if (step === 1) {
+        var appName = document.getElementById("app-name").value.trim();
+        var appUrl = document.getElementById("app-url").value.trim();
+        var appDesc = document.getElementById("app-description").value.trim();
+
+        if (!appName || !appUrl || !appDesc) {
+          showError("Please fill in all required fields");
+          return false;
+        }
+        if (appDesc.length < 10) {
+          showError("Description must be at least 10 characters");
+          return false;
+        }
+        collectFormData();
+        return true;
+      }
+
+      if (step === 2) {
+        var uris = Array.from(document.querySelectorAll(".redirect-uri-input"))
+          .map(function (el) {
+            return el.value.trim();
+          })
+          .filter(Boolean);
+
+        if (uris.length === 0) {
+          showError("Add at least one redirect URI");
+          return false;
+        }
+
+        collectFormData();
+        updateReview();
+        return true;
+      }
+
+      return true;
+    }
+
+    function updateReview() {
+      document.getElementById("review-app-name").textContent = formData.applicationName;
+      document.getElementById("review-app-url").textContent = formData.applicationUrl;
+      document.getElementById("review-app-description").textContent = formData.applicationDescription;
+
+      var uris = Array.from(document.querySelectorAll(".redirect-uri-input"))
+        .map(function (el) {
+          return el.value.trim();
+        })
+        .filter(Boolean);
+      document.getElementById("review-redirect-uris").innerHTML = uris
+        .map(function (uri) {
+          return "<div>" + uri + "</div>";
+        })
+        .join("");
+    }
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add("show");
+      setTimeout(function () {
+        errorMessage.classList.remove("show");
+      }, 5000);
+    }
+
+    nextBtn.addEventListener("click", function () {
+      if (!validateStep(currentStep)) {
+        return;
+      }
+
+      if (currentStep < 3) {
+        currentStep++;
+        showStep(currentStep);
+        errorMessage.classList.remove("show");
+      } else {
+        submitForm();
+      }
+    });
+
+    prevBtn.addEventListener("click", function () {
+      if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+        errorMessage.classList.remove("show");
+      }
+    });
+
+    addUriBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      var container = document.getElementById("redirect-uris-container");
+      var newItem = document.createElement("div");
+      newItem.className = "redirect-uri-item";
+      newItem.innerHTML =
+        '<input class="input redirect-uri-input" type="url" placeholder="https://myapp.com/callback" required />' +
+        '<button type="button" class="remove-uri-btn">Remove</button>';
+
+      container.appendChild(newItem);
+
+      newItem.querySelector(".remove-uri-btn").addEventListener("click", function (e) {
+        e.preventDefault();
+        newItem.remove();
+      });
+    });
+
+    function submitForm() {
+      var uris = Array.from(document.querySelectorAll(".redirect-uri-input"))
+        .map(function (el) {
+          return el.value.trim();
+        })
+        .filter(Boolean);
+
+      var payload = {
+        applicationName: formData.applicationName,
+        applicationUrl: formData.applicationUrl,
+        applicationDescription: formData.applicationDescription,
+        redirectUrl: uris[0]
+      };
+
+      nextBtn.innerHTML = '<span class="loading"></span>';
+      nextBtn.disabled = true;
+
+      fetch("/clients/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) {
+          return res.json();
+        })
+        .then(function (data) {
+          var clientId = data.data?.clientId || data.clientId;
+          var clientSecret = data.data?.clientSecret || data.clientSecret;
+
+          if (data.success && clientId && clientSecret) {
+            var clientIdEl = document.getElementById("client-id");
+            var clientSecretEl = document.getElementById("client-secret");
+
+            clientIdEl.textContent = clientId;
+            clientSecretEl.textContent = clientSecret;
+
+            form.style.display = "none";
+            successSection.classList.add("active");
+            formActions.style.display = "none";
+            successActions.style.display = "flex";
+
+            // Setup copy button listeners
+            document.querySelectorAll(".copy-btn").forEach(function (btn) {
+              btn.onclick = null;
+              btn.addEventListener("click", function (e) {
+                e.preventDefault();
+                var targetId = btn.getAttribute("data-copy");
+                var targetEl = document.getElementById(targetId);
+                var text = targetEl.textContent;
+
+                if (text && text.trim()) {
+                  navigator.clipboard.writeText(text).then(function () {
+                    btn.textContent = "Copied";
+                    btn.classList.add("copied");
+                    setTimeout(function () {
+                      btn.textContent = "Copy";
+                      btn.classList.remove("copied");
+                    }, 2000);
+                  }).catch(function () {
+                    btn.textContent = "Copy Failed";
+                  });
+                }
+              });
+            });
+          } else {
+            showError(extractApiMessage(data, "Registration failed"));
+            nextBtn.innerHTML = "Next";
+            nextBtn.disabled = false;
+          }
+        })
+        .catch(function (err) {
+          showError("Network error: " + (err && err.message ? err.message : "unable to reach the server"));
+          nextBtn.innerHTML = "Next";
+          nextBtn.disabled = false;
+        });
+    }
+
+    function extractApiMessage(data, fallback) {
+      var details = data && data.error && data.error.details;
+      if (Array.isArray(details) && details.length > 0) {
+        return details
+          .map(function (d) { return d && d.message; })
+          .filter(Boolean)
+          .join("; ");
+      }
+      if (data && data.error && data.error.message) return data.error.message;
+      if (data && data.message) return data.message;
+      return fallback;
+    }
+
+    document.getElementById("register-another-btn").addEventListener("click", function () {
+      form.reset();
+      form.style.display = "block";
+      successSection.classList.remove("active");
+      formActions.style.display = "flex";
+      successActions.style.display = "none";
+      currentStep = 1;
+      showStep(1);
+      errorMessage.classList.remove("show");
+    });
+
+    // Initialize - show Step 1 on page load
+    document.addEventListener("DOMContentLoaded", function () {
+      showStep(1);
+    });
+  </script>
+</body>
+</html>

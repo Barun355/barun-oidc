@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In Successful</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .success-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--spacing-8) var(--spacing-4);
+    }
+
+    .success-shell {
+      width: 100%;
+      max-width: 480px;
+      text-align: left;
+    }
+
+    .success-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .success-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+      color: var(--spectral-white);
+      margin-bottom: var(--spacing-4);
+    }
+
+    .success-message {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+      color: var(--spectral-white);
+      opacity: 0.78;
+      margin-bottom: var(--spacing-8);
+      letter-spacing: var(--track-tight);
+    }
+
+    .user-email {
+      display: inline-block;
+      margin-top: var(--spacing-3);
+      padding: var(--spacing-2) var(--spacing-3);
+      background-color: var(--ghost-surface);
+      border: 1px solid var(--ghost-border);
+      font-family: var(--font-mono);
+      font-size: var(--font-size-sm);
+      color: var(--spectral-white);
+      letter-spacing: var(--track-tight);
+      word-break: break-all;
+    }
+
+    .status-block {
+      padding: var(--spacing-4) var(--spacing-4);
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      margin-bottom: var(--spacing-8);
+    }
+
+    .status-line {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--spacing-4);
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+    }
+
+    .status-line + .status-line {
+      margin-top: var(--spacing-2);
+    }
+
+    .status-label {
+      color: var(--muted-text);
+    }
+
+    .status-value {
+      color: var(--spectral-white);
+      font-weight: 700;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: var(--spacing-3);
+      flex-wrap: wrap;
+    }
+
+    .action-buttons .btn-home,
+    .action-buttons .btn-dashboard {
+      flex: 1;
+      min-width: 160px;
+    }
+
+    @media (max-width: 480px) {
+      .action-buttons {
+        flex-direction: column;
+      }
+      .action-buttons .btn-home,
+      .action-buttons .btn-dashboard {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="success-page">
+    <div class="success-shell">
+      <div class="success-eyebrow">— Authentication Complete</div>
+      <h1 class="success-title">Welcome<br />back</h1>
+      <p class="success-message">
+        You have successfully signed in to your account.
+        <br />
+        <span class="user-email" id="user-email"></span>
+      </p>
+
+      <div class="status-block">
+        <div class="status-line">
+          <span class="status-label">Status</span>
+          <span class="status-value">Authenticated</span>
+        </div>
+        <div class="status-line">
+          <span class="status-label">Session</span>
+          <span class="status-value">Active</span>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <a href="/" class="btn-home">Back to Home</a>
+        <a href="/dashboard" class="btn-dashboard">Go to Dashboard</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var email = urlParams.get("email");
+    if (email) {
+      document.getElementById("user-email").textContent = email;
+    }
+  </script>
+</body>
+</html>

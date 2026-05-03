@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unauthorized Access</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .auth-page {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--spacing-10) var(--spacing-4);
+    }
+
+    .error-shell {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .error-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .error-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+      color: var(--spectral-white);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .error-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+      color: var(--spectral-white);
+      opacity: 0.7;
+      margin-bottom: var(--spacing-8);
+      letter-spacing: var(--track-tight);
+    }
+
+    .error-message {
+      padding: var(--spacing-4) var(--spacing-4);
+      background-color: var(--ghost-surface);
+      border: 1px solid var(--ghost-border);
+      border-left: 3px solid var(--spectral-white);
+      margin-bottom: var(--spacing-6);
+    }
+
+    .error-message-title {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      color: var(--spectral-white);
+      margin-bottom: var(--spacing-3);
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+    }
+
+    .error-message-text {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      color: var(--spectral-white);
+      opacity: 0.85;
+      line-height: 1.6;
+      letter-spacing: var(--track-tight);
+    }
+
+    .error-message-text ul {
+      margin-top: var(--spacing-3);
+      margin-left: 0;
+      list-style: none;
+    }
+
+    .error-message-text ul li {
+      padding-left: 1.5rem;
+      position: relative;
+      margin-bottom: var(--spacing-2);
+    }
+
+    .error-message-text ul li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--spectral-white);
+      font-weight: 700;
+    }
+
+    .error-details {
+      padding: var(--spacing-4) 0;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      margin-bottom: var(--spacing-6);
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--spacing-4);
+      padding: var(--spacing-2) 0;
+    }
+
+    .detail-label {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      color: var(--muted-text);
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      flex-shrink: 0;
+    }
+
+    .detail-value {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      color: var(--spectral-white);
+      word-break: break-all;
+      text-align: right;
+    }
+
+    .help-section {
+      padding: var(--spacing-6) 0;
+      border-bottom: 1px solid var(--hairline);
+      margin-bottom: var(--spacing-8);
+    }
+
+    .help-title {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-4);
+    }
+
+    .help-list {
+      list-style: none;
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      color: var(--spectral-white);
+      letter-spacing: var(--track-tight);
+    }
+
+    .help-list li {
+      margin-bottom: var(--spacing-3);
+      padding-left: 1.75rem;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .help-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--spectral-white);
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+
+    .help-list a {
+      color: var(--spectral-white);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+    }
+
+    .help-list a:hover { opacity: 0.7; }
+
+    .action-buttons {
+      display: flex;
+      gap: var(--spacing-3);
+      flex-wrap: wrap;
+    }
+
+    .action-buttons .btn-home,
+    .action-buttons .btn-contact {
+      flex: 1;
+      min-width: 160px;
+    }
+
+    @media (max-width: 480px) {
+      .action-buttons { flex-direction: column; }
+      .action-buttons .btn-home,
+      .action-buttons .btn-contact { width: 100%; }
+      .detail-item { flex-direction: column; align-items: flex-start; gap: var(--spacing-1); }
+      .detail-value { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <main class="auth-page">
+    <div class="error-shell">
+      <div class="error-eyebrow">— Access Denied</div>
+      <h1 class="error-title">Unauthorized<br />access</h1>
+      <p class="error-subtitle">This application requires authentication to proceed.</p>
+
+      <!-- Error Message -->
+      <div class="error-message">
+        <div class="error-message-title">// Missing or Invalid Client ID</div>
+        <div class="error-message-text">
+          You are trying to access the sign-in page without a valid application identifier. This could happen if:
+          <ul>
+            <li>The application has not been registered on this platform</li>
+            <li>The authorization request is malformed or incomplete</li>
+            <li>The application credentials have expired or been revoked</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Error Details -->
+      <div class="error-details">
+        <div class="detail-item">
+          <span class="detail-label">Error Code</span>
+          <span class="detail-value">UNAUTHORIZED_CLIENT</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Status</span>
+          <span class="detail-value">401 — Unauthorized</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Timestamp</span>
+          <span class="detail-value" id="error-timestamp"></span>
+        </div>
+      </div>
+
+      <!-- Help Section -->
+      <div class="help-section">
+        <div class="help-title">What you can do</div>
+        <ul class="help-list">
+          <li>Ensure your application is registered on Barun Auth</li>
+          <li>Verify that the client_id is correct and properly formatted</li>
+          <li>Check that your application's redirect URIs are properly configured</li>
+          <li>Contact your application administrator for assistance</li>
+          <li>Review the <a href="#">documentation</a> for more information</li>
+        </ul>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <a href="/" class="btn-home">Back to Home</a>
+        <a href="#" class="btn-contact">Contact Support</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var now = new Date();
+    document.getElementById("error-timestamp").textContent = now.toISOString();
+  </script>
+</body>
+</html>

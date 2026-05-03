@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Users table
+model User {
+  id                              String   @id @default(uuid())
+  firstName                       String   @db.VarChar(50)
+  lastName                        String   @db.VarChar(50)
+  email                           String   @unique @db.VarChar(256)
+  dateOfBirth                     DateTime?
+  gender                          String?  // 'male' or 'female'
+  password                        String
+  avatarUrl                       String? @default("https://ik.imagekit.io/yn9gz2n2g/Avatars/Common/common1.png?updatedAt=1750989714229")
+  passwordResetToken              String?
+  emailVerificationToken          String?
+  passwordResetTokenExpiresAt     DateTime?
+  emailVerificationTokenExpiresAt DateTime?
+  isVerified                      Boolean  @default(false)
+  createdAt                       DateTime @default(now())
+  updatedAt                       DateTime @updatedAt
+
+  // Relations
+  userCodes UserCode[]
+
+  @@map("users")
+}
+
+// OAuth Clients table
+model Client {
+  id                      String   @id @default(uuid())
+  applicationName         String   @unique @db.VarChar(50)
+  applicationDescription  String   @db.VarChar(200)
+  redirectUrl             String   @unique
+  applicationUrl          String   @unique
+  clientId                String   @unique
+  clientSecret            String   @unique
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  // Relations
+  userCodes UserCode[]
+
+  @@map("clients")
+}
+
+// User OAuth Codes/Tokens table
+model UserCode {
+  id                         String   @id @default(uuid())
+  clientId                   String
+  userId                     String
+  refreshToken               String?
+  authorizationCode          String?
+  refreshTokenExpiresAt      DateTime?
+  authorizationCodeExpiresAt DateTime?
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("userCodes")
+}
+

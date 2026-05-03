@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .auth-page {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--spacing-10) var(--spacing-4);
+    }
+
+    .auth-shell {
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .auth-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .auth-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+      color: var(--spectral-white);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .auth-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+      color: var(--spectral-white);
+      opacity: 0.7;
+      margin-bottom: var(--spacing-10);
+      letter-spacing: var(--track-tight);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-group + .form-group,
+    .name-row + .form-group,
+    .form-group + .name-row {
+      margin-top: var(--spacing-6);
+    }
+
+    .auth-shell .btn-primary {
+      width: 100%;
+      margin-top: var(--spacing-10);
+    }
+
+    /* Avatar upload */
+    .avatar-upload {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-4);
+    }
+
+    .avatar-preview {
+      position: relative;
+      width: 5rem;
+      height: 5rem;
+      border-radius: 0;
+      border: 1px dashed var(--ghost-border);
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--ghost-surface);
+      transition: border-color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .avatar-preview:hover {
+      border-color: var(--spectral-white);
+    }
+
+    .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .avatar-preview.has-image img { display: block; }
+    .avatar-preview.has-image .avatar-placeholder { display: none; }
+
+    .avatar-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      color: var(--muted-text);
+    }
+
+    .avatar-placeholder-text {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+    }
+
+    .avatar-upload input[type="file"] { display: none; }
+
+    .avatar-meta {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-1);
+    }
+
+    .avatar-hint {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--track-tight);
+      color: var(--muted-text);
+    }
+
+    .field-hint {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--track-tight);
+      color: var(--muted-text);
+      margin-top: var(--spacing-2);
+    }
+
+    /* Name row */
+    .name-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-6);
+    }
+
+    @media (max-width: 480px) {
+      .name-row { grid-template-columns: 1fr; gap: var(--spacing-6); }
+    }
+  </style>
+</head>
+<body>
+  <main class="auth-page">
+    <div class="auth-shell">
+      <div class="auth-eyebrow">— New User Registration</div>
+      <h1 class="auth-title">Create your<br />account</h1>
+      <p class="auth-subtitle">Fill in the details to begin.</p>
+
+      <form method="post" id="signup-form">
+        <div class="form-group">
+          <label class="label">Profile picture</label>
+          <div class="avatar-upload">
+            <label class="avatar-preview" for="picture">
+              <img id="avatar-img" src="" alt="Profile preview" />
+              <div class="avatar-placeholder">
+                <span class="avatar-placeholder-text">Upload</span>
+              </div>
+            </label>
+            <div class="avatar-meta">
+              <span class="avatar-hint">JPG / PNG / WebP</span>
+              <span class="avatar-hint">Max 2 MB</span>
+            </div>
+            <input
+              type="file"
+              id="picture"
+              name="picture"
+              accept="image/*"
+            />
+          </div>
+        </div>
+
+        <div class="name-row">
+          <div class="form-group">
+            <label class="label" for="firstName">First name</label>
+            <input
+              class="input"
+              id="firstName"
+              name="firstName"
+              type="text"
+              placeholder="John"
+              autocomplete="given-name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="lastName">Last name</label>
+            <input
+              class="input"
+              id="lastName"
+              name="lastName"
+              type="text"
+              placeholder="Doe"
+              autocomplete="family-name"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="email">Email</label>
+          <input
+            class="input"
+            id="email"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="password">Password</label>
+          <input
+            class="input"
+            id="password"
+            name="password"
+            type="password"
+            placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+            autocomplete="new-password"
+            required
+          />
+          <span class="field-hint">
+            Min 8 chars — uppercase, lowercase, number &amp; special (@$!%*?&amp;)
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="gender">Gender</label>
+          <select
+            class="input"
+            id="gender"
+            name="gender"
+            required
+          >
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="dateOfBirth">Date of Birth</label>
+          <input
+            class="input"
+            id="dateOfBirth"
+            name="dateOfBirth"
+            type="date"
+            required
+          />
+        </div>
+
+        <button class="btn btn-primary" type="submit" id="signup-btn">Create account</button>
+
+        <input type="hidden" id="avatarUrl" name="avatarUrl" value="https://ik.imagekit.io/yn9gz2n2g/Avatars/Common/common1.png?updatedAt=1750989714229" />
+      </form>
+
+      <div id="error-message" class="error-banner" style="display: none;"></div>
+
+    </div>
+  </main>
+
+  <script>
+    // Handle sign-up form submission
+    var signupForm = document.getElementById("signup-form");
+    var signupBtn = document.getElementById("signup-btn");
+    var errorMessage = document.getElementById("error-message");
+
+    signupForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var firstName = document.getElementById("firstName").value;
+      var lastName = document.getElementById("lastName").value;
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+      var gender = document.getElementById("gender").value;
+      var dateOfBirth = document.getElementById("dateOfBirth").value;
+      var avatarUrl = document.getElementById("avatarUrl").value;
+
+      signupBtn.disabled = true;
+      signupBtn.textContent = "Creating account...";
+      errorMessage.style.display = "none";
+
+      fetch("/o/auth2/v2/auth/sign-up", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+          gender: gender,
+          dateOfBirth: dateOfBirth,
+          avatarUrl: avatarUrl
+        })
+      })
+        .then(function (res) {
+          return res.json();
+        })
+        .then(function (data) {
+          if (data.success) {
+            window.location.href = "/signup-success.html?email=" + encodeURIComponent(email);
+          } else {
+            showError(extractApiMessage(data, "Sign up failed"));
+            signupBtn.disabled = false;
+            signupBtn.textContent = "Create account";
+          }
+        })
+        .catch(function (err) {
+          showError("Network error: " + (err && err.message ? err.message : "unable to reach the server"));
+          signupBtn.disabled = false;
+          signupBtn.textContent = "Create account";
+        });
+    });
+
+    function extractApiMessage(data, fallback) {
+      var details = data && data.error && data.error.details;
+      if (Array.isArray(details) && details.length > 0) {
+        return details
+          .map(function (d) { return d && d.message; })
+          .filter(Boolean)
+          .join("; ");
+      }
+      if (data && data.error && data.error.message) return data.error.message;
+      if (data && data.message) return data.message;
+      return fallback;
+    }
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = "block";
+    }
+
+    // Avatar preview and convert to data URL
+    document.getElementById("picture").addEventListener("change", function (e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        var img = document.getElementById("avatar-img");
+        img.src = ev.target.result;
+        img.parentElement.classList.add("has-image");
+        document.getElementById("avatarUrl").value = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
