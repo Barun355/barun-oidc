@@ -1,5 +1,5 @@
 import z from "zod";
-import ApiError from "../utils/api-error";
+import ApiError from "../utils/api-error.ts";
 import type { Request } from "express";
 
 class BaseDto {

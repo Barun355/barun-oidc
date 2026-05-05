@@ -1,7 +1,7 @@
 import type { Response, Request, NextFunction } from "express";
-import * as cryptoUtils from "../../common/utils/crypto";
-import ApiResponse from "../../common/utils/api-response";
-import { prisma } from "../../common/utils/prisma";
+import * as cryptoUtils from "../../common/utils/crypto.ts";
+import ApiResponse from "../../common/utils/api-response.ts";
+import { prisma } from "../../common/utils/prisma.ts";
 
 const verifyClientId = async function (
   req: Request,

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import * as clientController from "./controller";
-import validateDto from "../../common/middleware/validateDTO.middleware";
-import registerDto from "./dto/register.dto";
+import * as clientController from "./controller.ts";
+import validateDto from "../../common/middleware/validateDTO.middleware.ts";
+import registerDto from "./dto/register.dto.ts";
 
 const router: Router = Router();
 

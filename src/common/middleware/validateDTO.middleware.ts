@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import BaseDto from "../dto/base.dto";
+import BaseDto from "../dto/base.dto.ts";
 
 export const validateDto = (DtoClass: typeof BaseDto) => {
   return (req: Request, res: Response, next: NextFunction) => {

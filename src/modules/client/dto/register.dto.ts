@@ -1,4 +1,4 @@
-import BaseDto from "../../../common/dto/base.dto";
+import BaseDto from "../../../common/dto/base.dto.ts";
 import z from "zod";
 
 class registerDto extends BaseDto {

@@ -1,5 +1,5 @@
 import z from "zod";
-import BaseDto from "../../../common/dto/base.dto";
+import BaseDto from "../../../common/dto/base.dto.ts";
 
 class generateTokenDto extends BaseDto {
   static override schema = z.object({

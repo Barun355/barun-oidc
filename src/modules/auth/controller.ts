@@ -1,13 +1,13 @@
 import type { Request, Response } from "express";
-import ApiResponse from "../../common/utils/api-response";
+import ApiResponse from "../../common/utils/api-response.ts";
 import path from "path";
 import fs from "fs";
-import { prisma } from "../../common/utils/prisma";
-import ApiError from "../../common/utils/api-error";
-import * as bcryptUtils from "../../common/utils/bcrypt";
-import * as cryptoUtils from "../../common/utils/crypto";
+import { prisma } from "../../common/utils/prisma.ts";
+import ApiError from "../../common/utils/api-error.ts";
+import * as bcryptUtils from "../../common/utils/bcrypt.ts";
+import * as cryptoUtils from "../../common/utils/crypto.ts";
 import jwt from "jsonwebtoken";
-import { PRIVATE_KEY, PUBLIC_KEY } from "../../common/utils/cert";
+import { PRIVATE_KEY, PUBLIC_KEY } from "../../common/utils/cert.ts";
 
 const ISSUER = process.env.SERVER_URL;
 interface JWTClaims {
