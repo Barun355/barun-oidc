@@ -1,5 +1,5 @@
 import express from "express";
-import { PORT } from "./common/utils/constant.ts";
+import { PORT } from "./common/utils/constant";
 import cookieParser from "cookie-parser";
 import jose from "node-jose"
 
@@ -20,10 +20,10 @@ app.get("/", (req, res) => {
   return res.sendFile("index.html", { root: "public" });
 });
 
-import authRouter from "./modules/auth/router.ts";
-import clientRouter from "./modules/client/router.ts";
-import { PUBLIC_KEY } from "./common/utils/cert.ts";
-import globalErrorHandler from "./common/middleware/globalErrorHandler.middleware.ts";
+import authRouter from "./modules/auth/router";
+import clientRouter from "./modules/client/router";
+import { PUBLIC_KEY } from "./common/utils/cert";
+import globalErrorHandler from "./common/middleware/globalErrorHandler.middleware";
 
 app.use("/clients", clientRouter);
 app.use("/o/auth2/v2/auth", authRouter);

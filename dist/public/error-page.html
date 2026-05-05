@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Error</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .error-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--spacing-8) var(--spacing-4);
+    }
+
+    .error-shell {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    .error-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .error-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+      color: var(--spectral-white);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .error-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+      color: var(--spectral-white);
+      opacity: 0.7;
+      margin-bottom: var(--spacing-8);
+      letter-spacing: var(--track-tight);
+    }
+
+    .error-message {
+      padding: var(--spacing-4) var(--spacing-4);
+      background-color: var(--ghost-surface);
+      border: 1px solid var(--ghost-border);
+      border-left: 3px solid var(--spectral-white);
+      margin-bottom: var(--spacing-6);
+    }
+
+    .error-message-title {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      color: var(--spectral-white);
+      margin-bottom: var(--spacing-2);
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+    }
+
+    .error-message-text {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-sm);
+      color: var(--spectral-white);
+      opacity: 0.85;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .error-details {
+      padding: var(--spacing-4) 0;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      margin-bottom: var(--spacing-8);
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--spacing-4);
+      padding: var(--spacing-2) 0;
+    }
+
+    .detail-label {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      color: var(--muted-text);
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      flex-shrink: 0;
+    }
+
+    .detail-value {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      color: var(--spectral-white);
+      word-break: break-all;
+      text-align: right;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: var(--spacing-3);
+      flex-wrap: wrap;
+    }
+
+    .action-buttons .btn-home,
+    .action-buttons .btn-retry {
+      flex: 1;
+      min-width: 160px;
+    }
+
+    @media (max-width: 480px) {
+      .action-buttons { flex-direction: column; }
+      .action-buttons .btn-home,
+      .action-buttons .btn-retry { width: 100%; }
+      .detail-item { flex-direction: column; align-items: flex-start; gap: var(--spacing-1); }
+      .detail-value { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <main class="error-page">
+    <div class="error-shell">
+      <div class="error-eyebrow">— System Anomaly</div>
+      <h1 class="error-title">Something<br />went wrong</h1>
+      <p class="error-subtitle">An error occurred while processing your request.</p>
+
+      <!-- Error Message -->
+      <div class="error-message">
+        <div class="error-message-title">// Error Details</div>
+        <div class="error-message-text" id="error-text">An unexpected error occurred. Please try again.</div>
+      </div>
+
+      <!-- Error Details -->
+      <div class="error-details">
+        <div class="detail-item">
+          <span class="detail-label">Timestamp</span>
+          <span class="detail-value" id="error-timestamp"></span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Page</span>
+          <span class="detail-value" id="error-page"></span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <a href="/" class="btn-home">Back to Home</a>
+        <button id="retry-btn" class="btn-retry" type="button">Try Again</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var errorMessage = urlParams.get("error") || "An unexpected error occurred. Please try again.";
+    var referrer = document.referrer || "Unknown";
+
+    document.getElementById("error-text").textContent = errorMessage;
+    document.getElementById("error-timestamp").textContent = new Date().toISOString();
+    document.getElementById("error-page").textContent = referrer || "N/A";
+
+    document.getElementById("retry-btn").addEventListener("click", function () {
+      if (document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = "/";
+      }
+    });
+  </script>
+</body>
+</html>

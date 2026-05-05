@@ -1,1 +1,0 @@
-{"version":3,"file":"generateToken.dto.d.ts","sourceRoot":"","sources":["../../../../src/modules/auth/dto/generateToken.dto.ts"],"names":[],"mappings":"AAAA,OAAO,CAAC,MAAM,KAAK,CAAC;AACpB,OAAO,OAAO,MAAM,8BAA8B,CAAC;AAEnD,cAAM,gBAAiB,SAAQ,OAAO;IACpC,OAAgB,MAAM;;;sBAGnB;CACJ;AAED,eAAe,gBAAgB,CAAC"}

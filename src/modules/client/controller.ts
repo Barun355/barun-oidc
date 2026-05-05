@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
-import { prisma } from "../../common/utils/prisma.ts";
-import ApiResponse from "../../common/utils/api-response.ts";
-import ApiError from "../../common/utils/api-error.ts";
-import * as cryptoUtils from "../../common/utils/crypto.ts";
+import { prisma } from "../../common/utils/prisma";
+import ApiResponse from "../../common/utils/api-response";
+import ApiError from "../../common/utils/api-error";
+import * as cryptoUtils from "../../common/utils/crypto";
 
 export const getRegister = async (req: Request, res: Response) => {
   return ApiResponse.html(res, "client-register.html");

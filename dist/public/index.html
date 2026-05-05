@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barun Auth — OIDC Compliant Central Auth Service</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    html { scroll-behavior: smooth; }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main { flex: 1; }
+
+    /* ============================================================
+       Navigation — transparent overlay
+       ============================================================ */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-4) var(--spacing-8);
+      background-color: transparent;
+      border-bottom: 1px solid var(--hairline);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--font-size-sm);
+      letter-spacing: var(--track-nav);
+      text-transform: uppercase;
+      color: var(--spectral-white);
+      text-decoration: none;
+    }
+
+    .navbar-brand-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      border: 1px solid var(--ghost-border);
+      font-family: var(--font-display);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      color: var(--spectral-white);
+    }
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-6);
+    }
+
+    .navbar-links a {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--spectral-white);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+
+    .navbar-links a:hover { opacity: 1; }
+
+    .navbar-links a.btn,
+    .navbar-links a.btn-primary {
+      opacity: 1;
+    }
+
+    /* ============================================================
+       Hero — full viewport cinematic scene
+       ============================================================ */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: calc(100vh - 4.5rem);
+      padding: var(--spacing-12) var(--spacing-8);
+      position: relative;
+
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 0%, var(--space-black) 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content {
+      max-width: 780px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.4rem 0.85rem;
+      border: 1px solid var(--ghost-border);
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      color: var(--spectral-white);
+      margin-bottom: var(--spacing-6);
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-mega);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: var(--spacing-6);
+      color: var(--spectral-white);
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--font-size-lg);
+      line-height: 1.6;
+      color: var(--spectral-white);
+      opacity: 0.78;
+      margin-bottom: var(--spacing-10);
+      max-width: 600px;
+      letter-spacing: var(--track-tight);
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: var(--spacing-3);
+      flex-wrap: wrap;
+    }
+
+    .hero-cta .btn { min-width: 160px; }
+
+    /* ============================================================
+       Section header (shared)
+       ============================================================ */
+    .section-header {
+      margin-bottom: var(--spacing-12);
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: var(--spacing-4);
+      color: var(--spectral-white);
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+    }
+
+    .section-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--font-size-base);
+      color: var(--spectral-white);
+      opacity: 0.7;
+      max-width: 560px;
+    }
+
+    /* ============================================================
+       Features — stacked typographic blocks
+       ============================================================ */
+    .features {
+      padding: var(--spacing-12) var(--spacing-8);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .features-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .features-list {
+      border-top: 1px solid var(--hairline);
+    }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: 6rem 1fr 2fr;
+      gap: var(--spacing-8);
+      align-items: baseline;
+      padding: var(--spacing-8) 0;
+      border-bottom: 1px solid var(--hairline);
+      transition: border-color 0.3s ease;
+    }
+
+    .feature-row:hover {
+      border-bottom-color: var(--hairline-strong);
+    }
+
+    .feature-index {
+      font-family: var(--font-display);
+      font-size: var(--font-size-sm);
+      font-weight: 400;
+      color: var(--muted-text);
+      letter-spacing: var(--track-nav);
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-xl);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--spectral-white);
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+    }
+
+    .feature-description {
+      font-family: var(--font-body);
+      font-size: var(--font-size-base);
+      line-height: 1.65;
+      color: var(--spectral-white);
+      opacity: 0.72;
+      letter-spacing: var(--track-tight);
+    }
+
+    /* ============================================================
+       How it works — numbered scenes
+       ============================================================ */
+    .how-it-works {
+      padding: var(--spacing-12) var(--spacing-8);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-top: 1px solid var(--hairline);
+    }
+
+    .how-it-works-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--spacing-8);
+      margin-top: var(--spacing-8);
+    }
+
+    .step-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-4);
+      padding-top: var(--spacing-6);
+      border-top: 1px solid var(--hairline);
+    }
+
+    .step-number {
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      color: var(--spectral-white);
+      letter-spacing: var(--track-display);
+      line-height: 1;
+    }
+
+    .step-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      color: var(--spectral-white);
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+    }
+
+    .step-description {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+      color: var(--spectral-white);
+      opacity: 0.7;
+      letter-spacing: var(--track-tight);
+    }
+
+    /* ============================================================
+       Footer — minimal uppercase
+       ============================================================ */
+    .footer {
+      padding: var(--spacing-12) var(--spacing-8) var(--spacing-6);
+      background-color: transparent;
+      border-top: 1px solid var(--hairline);
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto var(--spacing-8);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--spacing-8);
+    }
+
+    .footer-section h3 {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      margin-bottom: var(--spacing-4);
+      color: var(--muted-text);
+    }
+
+    .footer-section ul li {
+      margin-bottom: var(--spacing-2);
+    }
+
+    .footer-section a {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      color: var(--spectral-white);
+      opacity: 0.7;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: var(--track-tight);
+      transition: opacity 0.2s ease;
+    }
+
+    .footer-section a:hover { opacity: 1; }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding-top: var(--spacing-6);
+      border-top: 1px solid var(--hairline);
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+    }
+
+    /* ============================================================
+       Responsive
+       ============================================================ */
+    @media (max-width: 768px) {
+      .navbar { padding: var(--spacing-3) var(--spacing-4); }
+      .navbar-links { gap: var(--spacing-3); }
+      .navbar-links a:not(.btn):not(.btn-primary) { display: none; }
+
+      .hero { padding: var(--spacing-8) var(--spacing-4); }
+      .hero-cta { flex-direction: column; align-items: stretch; }
+      .hero-cta .btn { width: 100%; }
+
+      .features, .how-it-works { padding: var(--spacing-8) var(--spacing-4); }
+
+      .feature-row {
+        grid-template-columns: 3rem 1fr;
+        gap: var(--spacing-4);
+      }
+
+      .feature-description {
+        grid-column: 1 / -1;
+      }
+
+      .footer { padding: var(--spacing-8) var(--spacing-4); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <span class="navbar-brand-mark">B</span>
+      <span>Barun Auth</span>
+    </a>
+    <div class="navbar-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="/clients/register" class="btn btn-primary">Register App</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">OpenID Connect Compliant</div>
+        <h1 class="hero-title">Modern OIDC<br />Central Auth Service</h1>
+        <p class="hero-subtitle">
+          A custom, standards-compliant authentication service built for seamless integration across your applications. Secure, scalable, and easy to implement.
+        </p>
+        <div class="hero-cta">
+          <a href="#how-it-works" class="btn btn-primary">How it works</a>
+          <a href="/clients/register" class="btn btn-outline">Register App</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="features-container">
+        <div class="section-header">
+          <div class="section-eyebrow">— Capabilities</div>
+          <h2 class="section-title">Why Choose<br />Barun Auth</h2>
+          <p class="section-subtitle">Everything you need for modern authentication</p>
+        </div>
+
+        <div class="features-list">
+          <div class="feature-row">
+            <div class="feature-index">01 / 06</div>
+            <h3 class="feature-title">OIDC Compliant</h3>
+            <p class="feature-description">
+              Fully compliant with the OpenID Connect specification. Works seamlessly with any OIDC-compatible client out of the box.
+            </p>
+          </div>
+
+          <div class="feature-row">
+            <div class="feature-index">02 / 06</div>
+            <h3 class="feature-title">Fast &amp; Reliable</h3>
+            <p class="feature-description">
+              Built for performance. Quick authentication flows with minimal latency and maximum uptime under load.
+            </p>
+          </div>
+
+          <div class="feature-row">
+            <div class="feature-index">03 / 06</div>
+            <h3 class="feature-title">Secure by Default</h3>
+            <p class="feature-description">
+              Industry-standard security practices. PKCE, secure sessions, and modern encryption standards baked in.
+            </p>
+          </div>
+
+          <div class="feature-row">
+            <div class="feature-index">04 / 06</div>
+            <h3 class="feature-title">Easy Integration</h3>
+            <p class="feature-description">
+              Simple API and clear documentation. Integrate in minutes, not days. Supports multiple frameworks and runtimes.
+            </p>
+          </div>
+
+          <div class="feature-row">
+            <div class="feature-index">05 / 06</div>
+            <h3 class="feature-title">User Management</h3>
+            <p class="feature-description">
+              Comprehensive user profile system with support for custom claims and flexible data models.
+            </p>
+          </div>
+
+          <div class="feature-row">
+            <div class="feature-index">06 / 06</div>
+            <h3 class="feature-title">Cinematic Interface</h3>
+            <p class="feature-description">
+              Aerospace-grade visual language. Functional, focused, and engineered to disappear behind your work.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it Works Section -->
+    <section id="how-it-works" class="how-it-works">
+      <div class="how-it-works-container">
+        <div class="section-header">
+          <div class="section-eyebrow">— Mission Procedure</div>
+          <h2 class="section-title">How it Works</h2>
+          <p class="section-subtitle">Four steps to get your app authenticated</p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">01</div>
+            <h3 class="step-title">Register Your App</h3>
+            <p class="step-description">
+              Create an account and register your application. Provide basic information about your app and configure your redirect URIs.
+            </p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">02</div>
+            <h3 class="step-title">Get Credentials</h3>
+            <p class="step-description">
+              Receive your Client ID and Client Secret. Use these to authenticate your application and request tokens securely.
+            </p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">03</div>
+            <h3 class="step-title">Implement Authorization</h3>
+            <p class="step-description">
+              Use the OIDC authorization flow to handle user login. Redirect users to our authorization endpoint and handle callbacks.
+            </p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">04</div>
+            <h3 class="step-title">Exchange for Tokens</h3>
+            <p class="step-description">
+              Exchange authorization codes for access and ID tokens. Securely store tokens and use them to access protected resources.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works">How it works</a></li>
+          <li><a href="/clients/register">Register App</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">Status</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      &copy; 2026 Barun Auth — All rights reserved
+    </div>
+  </footer>
+</body>
+</html>

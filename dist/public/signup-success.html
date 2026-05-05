@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up Successful</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .success-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--spacing-8) var(--spacing-4);
+    }
+
+    .success-shell {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .success-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .success-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: var(--track-display);
+      color: var(--spectral-white);
+      margin-bottom: var(--spacing-4);
+    }
+
+    .success-message {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+      color: var(--spectral-white);
+      opacity: 0.78;
+      margin-bottom: var(--spacing-6);
+      letter-spacing: var(--track-tight);
+    }
+
+    .user-email {
+      display: inline-block;
+      margin-top: var(--spacing-3);
+      padding: var(--spacing-2) var(--spacing-3);
+      background-color: var(--ghost-surface);
+      border: 1px solid var(--ghost-border);
+      font-family: var(--font-mono);
+      font-size: var(--font-size-sm);
+      color: var(--spectral-white);
+      word-break: break-all;
+    }
+
+    .next-steps {
+      padding: var(--spacing-6) 0;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      margin: var(--spacing-6) 0 var(--spacing-8);
+    }
+
+    .next-steps-title {
+      font-family: var(--font-body);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--track-nav);
+      color: var(--muted-text);
+      margin-bottom: var(--spacing-4);
+    }
+
+    .next-steps-list {
+      list-style: none;
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      color: var(--spectral-white);
+      letter-spacing: var(--track-tight);
+    }
+
+    .next-steps-list li {
+      margin-bottom: var(--spacing-3);
+      padding-left: 1.75rem;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .next-steps-list li:last-child { margin-bottom: 0; }
+
+    .next-steps-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--spectral-white);
+      font-weight: 700;
+      font-family: var(--font-display);
+      letter-spacing: var(--track-nav);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: var(--spacing-3);
+      flex-wrap: wrap;
+    }
+
+    .action-buttons .btn-home {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    @media (max-width: 480px) {
+      .action-buttons { flex-direction: column; }
+      .action-buttons .btn-home { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="success-page">
+    <div class="success-shell">
+      <div class="success-eyebrow">— Account Provisioned</div>
+      <h1 class="success-title">Account<br />created</h1>
+      <p class="success-message">
+        Welcome to Barun Auth. Your account has been created.
+        <br />
+        <span class="user-email" id="user-email"></span>
+      </p>
+
+      <div class="next-steps">
+        <div class="next-steps-title">Next Steps</div>
+        <ul class="next-steps-list">
+          <li>Sign in with your new credentials when prompted by an OIDC client.</li>
+          <li>Register an application to receive Client ID and Client Secret.</li>
+          <li>Wire up redirect URIs and complete the OAuth handshake.</li>
+        </ul>
+      </div>
+
+      <div class="action-buttons">
+        <a href="/" class="btn-home">Back to Home</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var email = urlParams.get("email");
+    if (email) {
+      document.getElementById("user-email").textContent = email;
+    }
+  </script>
+</body>
+</html>

@@ -6,8 +6,10 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon --exec tsx ./src/index.ts",
-    "build": "tsc",
-    "start": "node ./dist/index.js"
+    "build:bun": "bunx --bun prisma generate && bun build ./src/index.ts --outdir ./dist --target bun",
+    "build:node": "bunx --bun prisma generate && build ./src/index.ts --outdir ./dist --target node",
+    "start:bun": "bun ./dist/index.js",
+    "start:node": "node ./dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -38,6 +40,8 @@
     "nodemon": "^3.1.14",
     "prisma": "^7.8.0",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.3"
-  }
+    "typescript": "^6.0.3",
+    "@types/bun": "latest"
+  },
+  "private": true
 }
